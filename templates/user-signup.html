@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div style="background-color: #faebd7">
+<form action="/welcome" method="POST">
+    <label for="">Username:
+        <input style="margin: 10px;" type="text" name="username" value='{{username}}'>{{errname}}</label>
+        <br />
+    <label for="">Password:
+        <input style="margin: 10px;" type="password" name="password" value='{{confirm_password}}'>{{errpass}}</label>
+        <br />
+    <label for="">Confirm Password:
+        <input style="margin: 10px;" type="password" name="confirm_password" value='{{confirm_password}}'>{{errconfirm}}</label>
+        <br />
+    <label for="">Email (optional):
+        <input style="margin: 10px;" type="text"name="email" value='{{email}}'>{{errmail}}</label>
+        <br />
+    <input style="margin: 10px;" type="submit">
+</form>
+</div>
+{% endblock %}
