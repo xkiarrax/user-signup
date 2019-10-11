@@ -59,6 +59,11 @@ def signed_in():
             email = ""
             return render_template('user-signup.html', username=username, errmail=errmail)
 
+    if len(secretquestion) < 3 or len(secretquestion) > 20:
+        errsecret = "Please enter an answer at between 3 - 20 characters."
+        secretquestion = ""
+        return render_template('user-signup.html', errsecret=errsecret, secretquestion=secretquestion)
+
     return render_template('welcome.html', username=username)
 
 

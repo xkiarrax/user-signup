@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<div style="background-color: #faebd7">
+<div style="background-color: #cac4c4;">
 <form action="/welcome" method="POST">
     <label for="">Username:
         <input style="margin: 10px;" type="text" name="username" value='{{username}}'>{{errname}}</label>
@@ -14,7 +14,7 @@
         <input style="margin: 10px;" type="password" name="confirm_password" value='{{confirm_password}}'>{{errconfirm}}</label>
         <br />
     <label for="">Email (optional):
-        <input style="margin: 10px;" type="text"name="email" value='{{email}}'>{{errmail}}</label>
+        <input style="margin: 10px;" type="text" name="email" value='{{email}}'>{{errmail}}</label>
         <br />
     <input style="margin: 10px;" type="submit">
 </form>
