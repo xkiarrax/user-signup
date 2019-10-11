@@ -1,71 +1,57 @@
 from flask import Flask, request, redirect, render_template
+import cgi
+import os
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
 
 
-@app.route("/signup", methods=['GET', 'POST'])
-def index():
-    return render_template('user-signup.html')
+@app.route("/")
+def sign_up():
+    return render_template("user-signup.html")                     #this is the first page of the program, we are rendering the form from the templates that was written in html
 
-@app.route("/welcome", methods=['POST'])
-def signed_in():
+@app.route("/register", methods=['POST'])                   # this second page is a registration page, using the "POST" method so info doesn't appear in URL
+def register():
     username = request.form['username']
-    errname = ""
     password = request.form['password']
-    errpass = ""
-    confirm_password = request.form['confirm_password']
-    errconfirm = ""
+    verify = request.form['verify']
     email = request.form['email']
-    errmail = ""
 
-    if len(username) < 3 or len(username) > 20:
-        errname = "Please enter a username between 3 and 20 characters."
-        username = ""
-        return render_template('user-signup.html', errname=errname, email=email)
-    elif " " in username:
-        errname = "Usename may not contain any spaces."
-        username = ""
-        return render_template('user-signup.html', errname=errname, email=email)
+    username_error = ""                                         # here you're creating an empty string for the username error to make it a variable
+    password_error = ""
+    verify_error = ""
+    email_error = ""
+
+
+
+#THIS IS FOR THE USERNAME ERROR
+    if not 20 >= len(username) >= 3 or " " in username:         # if the username is greater than 20 characters or less than three, or there is a space                
+        username_error = "Please enter a valid username. Username should be between 3-20 characters and cannot contain any spaces or periods."       # it will produce an error message
+
+#THIS IS FOR THE PASSWORD ERROR
+    if not 20 >= len(password) >= 3 or " " in password:
+        password_error = "Please enter a valid password. Password should be between 3-20 characters and cannot contain any spaces or periods."       
+
+#THIS IS FOR VERIFYING THE PASSWORD
+    if verify != password:                                  
+        verify_error = "Password does not match."
+
+#THIS IS FOR EMAIL
+    if email != "":                                                                         #if the email field is not left blank...do the following
+        if not 20 >=len(email) >= 3 or " " in email or email.count("@")> 1 or email.count(".")>1:
+            email_error = "Please enter a vaild email address. Email address should be between 3-20 characters and cannot contain any spaces. Must only have 1 '@' and 1 period."
+
     
-    if len(password) < 3 or len(password) > 20:
-        errpass = "Please enter a password beween 3 and 20 characters."
-        password = ""
-        confirm_password = ""
-        return render_template('user-signup.html', errpass=errpass, username=username, email=email)
-    elif " " in password:
-        errpass = "Password may not contain any spaces."
-        password = ""
-        confirm_password = ""
-        return render_template('user-signup.html', errpass=errpass, username=username, email=email)
-    
-    if password != confirm_password:
-        errconfirm = "Passwords must match."
-        password = ""
-        confirm_password = ""
-        return render_template('user-signup.html', errconfirm=errconfirm, username=username, email=email)
-
-    if email:
-        if '@' not in email or "." not in email:
-            errmail = "Please enter a valid email."
-            email = ""
-            return render_template('user-signup.html', username=username, errmail=errmail)
-        elif len(email) < 3 or len(email) > 20:
-            errmail = "Email must be between 3 and 20 characters."
-            email = ""
-            return render_template('user-signup.html', username=username, errmail=errmail)
-        elif " " in email:
-            errmail = "Email may not contain spaces.."
-            email = ""
-            return render_template('user-signup.html', username=username, errmail=errmail)
-
-    if len(secretquestion) < 3 or len(secretquestion) > 20:
-        errsecret = "Please enter an answer at between 3 - 20 characters."
-        secretquestion = ""
-        return render_template('user-signup.html', errsecret=errsecret, secretquestion=secretquestion)
-
-    return render_template('welcome.html', username=username)
+    if not username_error and not password_error and not verify_error and not email_error:                      #if there is no error in the username send them to the correct page                                                                    
+        return redirect("/welcome?username={0}".format(username))                               
+    else:
+        return render_template('user-signup.html', username=username, username_error=username_error, password_error=password_error, verify_error=verify_error, email_error=email_error, email =email)   #otherwise, give the user the form with the username in tact
 
 
+
+@app.route("/welcome")                                                                          #the page is being directed to the welcome page
+def valid_signup():                                                                             # here we are requesting the program to retrieve the username that was entered
+    username = request.args.get("username")
+    return render_template("welcome.html", username=username)                                   # here we are rendering the template "welcome.html" and returning the page to the user
 
 app.run()
