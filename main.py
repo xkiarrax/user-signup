@@ -38,9 +38,8 @@ def register():
 
 #THIS IS FOR EMAIL
     if email != "":                                                                         #if the email field is not left blank...do the following
-        if not 20 >=len(email) >= 3 or " " in email or email.count("@")> 1 or email.count(".")>1:
+        if not 2 < len(email) < 20 or " " in email or not email.count("@") == 1 or not email.count(".") == 1:
             email_error = "Please enter a vaild email address. Email address should be between 3-20 characters and cannot contain any spaces. Must only have 1 '@' and 1 period."
-
     
     if not username_error and not password_error and not verify_error and not email_error:                      #if there is no error in the username send them to the correct page                                                                    
         return redirect("/welcome?username={0}".format(username))                               
